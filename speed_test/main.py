@@ -9,6 +9,9 @@ def speed_test(url, rounds):
     all_time = []
     all_size = 0
 
+    success_count = 0
+    failed_count = 0
+
     print(f"Запуск теста: {rounds} запросов последовательно...")
 
     for i in range(1, rounds + 1):
@@ -21,6 +24,7 @@ def speed_test(url, rounds):
         except requests.exceptions.RequestException as e:
             status = getattr(e.response, "status_code", "Network Error")
             print(f"Запрос № {i} завершился c ошибкой: {status} ({e})")
+            failed_count+= 1
             continue
         end_time = time.monotonic()
 
@@ -30,16 +34,20 @@ def speed_test(url, rounds):
         all_size += file_size_mb
 
         print(f"Запрос № {i} отработал корректно")
+        success_count += 1
 
     if not all_time:
         print("\n=== Результаты замера ===")
-        print("Не удалось успешно выполнить ни одного запроса. Тест скорости невозможен.")
+        print(f"Все запросы ({failed_count}) завершились ошибкой. Тест скорости невозможен.")
         return
 
     average_time = sum(all_time) / len(all_time)
     speed_mbps = all_size / sum(all_time)
 
     print("\n=== Результаты замера ===")
+    print(f"Успешных запросов: {success_count} из {rounds}")
+    if failed_count > 0:
+        print(f"Запросов с ошибкой: {failed_count}")
     print(f"Размер скачанных данных: {all_size:.2f} МБ")
     print(f"Среднее время запроса: {average_time:.3f} сек.")
     print(f"Скорость скачивания: {speed_mbps:.2f} МБ/c")
