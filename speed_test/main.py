@@ -10,18 +10,31 @@ def speed_test(url, rounds):
     all_size = 0
 
     print(f"Запуск теста: {rounds} запросов последовательно...")
-    
-    for _ in range(rounds):
-        start_time = time.time()
 
-        response = requests.get(f"{url}?cache_bust={random.randint(1, 100000)}")
+    for i in range(1, rounds + 1):
+        start_time = time.monotonic()
 
-        end_time = time.time()
+        try:
+            response = requests.get(f"{url}?cache_bust={random.randint(1, 100000)}", timeout=15)
+            response.raise_for_status()
+        except requests.exceptions.RequestException as e:
+            status = getattr(e.response, "status_code", "Network Error")
+            print(f"Запрос № {i} завершился c ошибкой: {status} ({e})")
+            continue
+
+        end_time = time.monotonic()
 
         file_size_mb = len(response.content) / (1024*1024)
         duration = end_time - start_time
         all_time.append(duration)
         all_size += file_size_mb
+
+        print(f"Запрос № {i} отработал корректно")
+
+    if not all_time:
+        print("\n=== Результаты замера ===")
+        print("Не удалось успешно выполнить ни одного запроса. Тест скорости невозможен.")
+        return
 
     average_time = sum(all_time) / len(all_time)
     speed_mbps = all_size / sum(all_time)
