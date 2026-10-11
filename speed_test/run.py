@@ -8,6 +8,4 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--url", type=str, help="Ссылка на тяжелую картинку", default=TEST_URL_DEFAULT)
     p.add_argument("--rounds", type=int, help="Количество запросов к адресу картинки", default=DEFAULT_ROUNDS)
 
-    p.parse_args()
-
     return p
