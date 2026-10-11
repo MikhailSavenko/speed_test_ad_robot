@@ -8,7 +8,8 @@ import random
 def speed_test(url, rounds):
     all_time = []
     all_size = 0
-    file_size_mb = 0
+
+    print(f"Запуск теста: {rounds} запросов последовательно...")
     
     for _ in range(rounds):
         start_time = time.time()
@@ -22,12 +23,15 @@ def speed_test(url, rounds):
         all_time.append(duration)
         all_size += file_size_mb
 
+    average_time = sum(all_time) / len(all_time)
     speed_mbps = all_size / sum(all_time)
-    speed_mbit = speed_mbps * 8
 
-    print(f"Размер: {file_size_mb} МБ")
+    print("\n=== Результаты замера ===")
+    print(f"Размер скачанных данных: {all_size:.2f} МБ")
+    print(f"Среднее время запроса: {average_time:.3f} сек.")
     print(f"Скорость скачивания: {speed_mbps:.2f} МБ/c")
-    print(f"Скорость интернета: {speed_mbit} Мбит/c")
+
+    print(f"Скорость интернета: {speed_mbps * 8:.2f} Мбит/c")
 
 
 if __name__ == "__main__":
