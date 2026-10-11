@@ -1,4 +1,4 @@
-from speed_test.run import build_parser
+from run import build_parser
 
 import time
 import requests

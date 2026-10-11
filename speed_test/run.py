@@ -1,4 +1,4 @@
-from speed_test.constants import TEST_URL_DEFAULT, DEFAULT_ROUNDS
+from constants import TEST_URL_DEFAULT, DEFAULT_ROUNDS
 
 import argparse
 
