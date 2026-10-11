@@ -2,14 +2,13 @@ import time
 import requests
 import random
 
-url = "https://samplelib.com/png/sample-photo-3840x2160.png"
 
-
-def speed_test(url):
+def speed_test(url, rounds):
     all_time = []
     all_size = 0
-
-    for _ in range(10):
+    file_size_mb = 0
+    
+    for _ in range(rounds):
         start_time = time.time()
 
         response = requests.get(f"{url}?cache_bust={random.randint(1, 100000)}")
@@ -28,5 +27,3 @@ def speed_test(url):
     print(f"Размер: {file_size_mb} МБ")
     print(f"Скорость скачивания: {speed_mbps:.2f} МБ/c")
     print(f"Скорость интернета: {speed_mbit} Мбит/c")
-
-speed_test(url)
