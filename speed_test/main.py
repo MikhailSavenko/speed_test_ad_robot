@@ -12,16 +12,16 @@ def speed_test(url, rounds):
     print(f"Запуск теста: {rounds} запросов последовательно...")
 
     for i in range(1, rounds + 1):
-        start_time = time.monotonic()
+        bust_url = f"{url}?cache_bust={random.randint(1, 100000)}"
 
+        start_time = time.monotonic()
         try:
-            response = requests.get(f"{url}?cache_bust={random.randint(1, 100000)}", timeout=15)
+            response = requests.get(bust_url, timeout=15)
             response.raise_for_status()
         except requests.exceptions.RequestException as e:
             status = getattr(e.response, "status_code", "Network Error")
             print(f"Запрос № {i} завершился c ошибкой: {status} ({e})")
             continue
-
         end_time = time.monotonic()
 
         file_size_mb = len(response.content) / (1024*1024)
